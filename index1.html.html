@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCare · Your wellness space</title>
+<style>
+:root{--ink:#222238;--muted:#85889a;--line:#ececf3;--purple:#7657e8;--purple2:#a34fe0;--lav:#f2eeff;--bg:#f5f5fa;--white:#fff;--green:#20ad79;--red:#d94b65;--shadow:0 18px 55px rgba(35,28,72,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);min-height:100vh}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.hidden{display:none!important}
+.auth-screen{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;background:linear-gradient(135deg,#f5f1ff,#f8f7fc 55%,#eef5ff)}
+.auth-side{padding:8vh 8vw;display:flex;flex-direction:column;justify-content:center}.brand{font-size:25px;font-weight:850;letter-spacing:-1px}.brand span{color:var(--purple)}.tagline{font-size:clamp(34px,4.5vw,58px);font-weight:800;line-height:1.08;letter-spacing:-2px;max-width:570px;margin:48px 0 18px}.tagline em{font-style:normal;color:var(--purple)}.auth-side p{max-width:440px;color:#777b91;line-height:1.75;font-size:15px}.auth-art{margin-top:38px;display:flex;gap:12px;align-items:center}.orb{width:52px;height:52px;border-radius:18px;background:linear-gradient(135deg,var(--purple),#d16cdd);display:grid;place-items:center;color:white;font-size:24px;box-shadow:0 10px 25px #8c65db55}.auth-art small{color:#777b91;line-height:1.5}
+.auth-card-wrap{display:grid;place-items:center;padding:28px}.auth-card{width:min(100%,440px);background:white;border:1px solid #eceaf5;border-radius:26px;padding:38px;box-shadow:var(--shadow)}.auth-card h1{font-size:29px;margin:0 0 8px;letter-spacing:-.8px}.auth-card .intro{margin:0 0 28px;color:var(--muted);font-size:13px;line-height:1.6}.field{margin:16px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:8px}.field input{width:100%;height:49px;border:1px solid #dedee9;border-radius:12px;padding:0 14px;outline:none;color:var(--ink)}.field input:focus{border-color:var(--purple);box-shadow:0 0 0 3px #7657e81a}.primary{border:0;background:linear-gradient(110deg,var(--purple),var(--purple2));color:white;font-weight:750;border-radius:13px;height:49px;padding:0 20px;box-shadow:0 7px 17px #8762df38}.primary.full{width:100%;margin-top:10px}.switch{margin-top:20px;text-align:center;color:var(--muted);font-size:12px}.linkbtn{border:0;background:none;color:var(--purple);font-weight:750;padding:4px}.status{min-height:18px;font-size:12px;margin-top:12px;color:var(--red);line-height:1.5}.fine{font-size:10px;color:#a0a2af;text-align:center;margin-top:18px;line-height:1.5}
+.app{height:100vh;min-height:620px;max-width:1600px;margin:auto;padding:18px;display:grid;grid-template-columns:70px 285px minmax(0,1fr);gap:14px}
+.rail,.sidebar,.main{background:var(--white);border:1px solid var(--line);border-radius:21px;box-shadow:var(--shadow)}
+.rail{display:flex;align-items:center;flex-direction:column;padding:17px 0;gap:17px}.logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--purple2));display:grid;place-items:center;color:white;font-size:21px;font-weight:900;margin-bottom:17px}.nav{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#9295a5;font-size:19px}.nav.active{background:var(--lav);color:var(--purple)}.nav.bottom{margin-top:auto}
+.sidebar{padding:22px 16px;display:flex;flex-direction:column;min-height:0}.brandline{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.brandline .brand{font-size:21px}.small-add{width:34px;height:34px;border:0;border-radius:11px;background:var(--lav);color:var(--purple);font-size:20px}.side-title{font-size:12px;font-weight:800;margin-bottom:13px}.person-card{display:flex;align-items:center;gap:10px;padding:12px 9px;background:#faf9ff;border-radius:14px}.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#7657e8,#cb68d7);display:grid;place-items:center;color:white;font-weight:800;flex:0 0 42px}.person-card b{display:block;font-size:12px}.person-card small{font-size:10px;color:var(--muted)}.side-label{font-size:10px;letter-spacing:1.2px;font-weight:800;color:#a0a2b0;margin:25px 5px 10px}.side-link{padding:11px 9px;border-radius:11px;font-size:12px;color:#777b8e}.side-link.active{background:var(--lav);color:var(--purple);font-weight:750}.reminder{margin-top:auto;padding:14px;border-radius:15px;background:linear-gradient(135deg,#f1edff,#fff1fa)}.reminder b{font-size:11px}.reminder p{font-size:10px;color:#777b91;line-height:1.55;margin:7px 0 0}
+.main{min-width:0;display:flex;flex-direction:column;overflow:hidden}.topbar{height:75px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 25px;gap:12px}.topbar .who{flex:1}.topbar b{font-size:14px}.topbar small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.online{color:var(--green)}.logout{border:1px solid var(--line);background:white;border-radius:11px;padding:9px 13px;font-size:11px;color:#666b7d}.page{flex:1;overflow:auto;padding:28px clamp(16px,4vw,52px);background:radial-gradient(ellipse at 50% 0%,#faf8ff,#fff 58%)}
+.dashboard h1{font-size:26px;letter-spacing:-.8px;margin:0 0 8px}.dashboard .lead{font-size:13px;color:var(--muted);margin:0 0 25px}.hero{padding:26px;border-radius:21px;background:linear-gradient(115deg,#7253df,#a34fe0);color:white;display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden}.hero h2{font-size:22px;margin:0 0 9px}.hero p{font-size:12px;line-height:1.6;opacity:.9;max-width:440px;margin:0 0 18px}.hero button{background:white;color:#7657d9;border:0;border-radius:11px;padding:11px 16px;font-size:11px;font-weight:800}.hero-icon{font-size:76px;opacity:.8;padding:0 22px}.section-head{display:flex;justify-content:space-between;align-items:center;margin:27px 0 13px}.section-head b{font-size:14px}.section-head small{color:var(--muted);font-size:10px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.tile{border:1px solid var(--line);border-radius:16px;padding:17px;background:white}.tile .tile-icon{font-size:21px;margin-bottom:12px}.tile b{font-size:12px;display:block;margin-bottom:6px}.tile p{font-size:10px;color:var(--muted);line-height:1.5;margin:0}.chatpage{height:100%;display:flex;flex-direction:column;max-width:950px;margin:auto}.chatwelcome{text-align:center;margin:4px auto 18px;max-width:430px}.bigicon{width:58px;height:58px;border-radius:20px;background:linear-gradient(135deg,var(--purple),var(--purple2));display:grid;place-items:center;color:white;font-size:25px;margin:0 auto 12px;box-shadow:0 9px 24px #9364df44}.chatwelcome h2{font-size:19px;margin:0 0 7px}.chatwelcome p{font-size:11px;color:var(--muted);line-height:1.6;margin:0}.messages{flex:1;overflow:auto;display:flex;flex-direction:column;gap:15px;padding:10px 5px 18px}.msg{display:flex;gap:8px;align-items:flex-end;max-width:82%}.msg.user{align-self:flex-end;flex-direction:row-reverse}.mini{width:27px;height:27px;flex:0 0 27px;border-radius:50%;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--purple),var(--purple2));font-size:10px;font-weight:800}.bubble{white-space:pre-wrap;overflow-wrap:anywhere;padding:11px 14px;border-radius:16px 16px 16px 5px;background:#f0f0f6;font-size:12px;line-height:1.65;color:#38394c}.user .bubble{background:linear-gradient(120deg,#7657e8,#9956e7);color:white;border-radius:16px 16px 5px 16px}.meta{font-size:9px;color:#a0a2ae;margin:4px 3px 0}.user .meta{text-align:right}.composer-area{border-top:1px solid var(--line);padding:14px 0 0}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.chips button{border:1px solid #e7e0fa;background:white;color:#7657d9;border-radius:20px;padding:7px 10px;font-size:10px}.composer{display:flex;gap:9px;align-items:flex-end;padding:9px 10px 9px 14px;border:1px solid #e3e3ed;background:#fbfbfe;border-radius:16px}.composer textarea{flex:1;min-height:26px;max-height:100px;resize:none;border:0;outline:0;background:transparent;font-size:12px;line-height:1.5;padding:5px 0}.send{width:39px;height:39px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--purple2));color:white;font-size:17px}.send:disabled{opacity:.5}.typing{font-size:10px;color:var(--muted);padding:3px 0}.chat-note{text-align:center;color:#a1a3af;font-size:9px;margin-top:8px}
+
+.mood-page{max-width:950px;margin:auto}.mood-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.mood-options{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0}.mood-option{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 6px;color:var(--ink)}
+.mood-option .emoji{display:block;font-size:28px;margin-bottom:7px}.mood-option small{font-size:11px}.mood-option.selected{border:2px solid var(--purple);background:var(--lav);color:var(--purple)}
+.mood-note{width:100%;min-height:85px;border:1px solid #dedee9;border-radius:12px;padding:12px;resize:vertical}.mood-save{margin-top:12px}
+.mood-status{font-size:12px;min-height:18px;margin-top:10px;color:var(--muted)}.mood-entry{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.mood-entry:last-child{border-bottom:0}.mood-entry-emoji{font-size:25px}.mood-entry-text{flex:1;min-width:0}.mood-entry-text b{font-size:13px}
+.mood-entry-text p{font-size:12px;color:var(--muted);margin:5px 0;white-space:pre-wrap;overflow-wrap:anywhere}.mood-entry-text small{font-size:10px;color:var(--muted)}
+.ai-insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}.ai-insight-stat{background:#faf9ff;border:1px solid #eee9ff;border-radius:13px;padding:14px}.ai-insight-stat small{display:block;color:var(--muted);font-size:10px;margin-bottom:7px}.ai-insight-stat strong{font-size:20px;color:var(--purple)}.ai-insight-message{font-size:12px;line-height:1.7;color:#62657a;background:#faf9ff;border-radius:12px;padding:13px;margin:12px 0}.ai-insight-status{font-size:11px;color:var(--muted);margin-top:10px;min-height:16px}.coach-output{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.8;color:#45465b;background:#faf9ff;border:1px solid #eee9ff;border-radius:14px;padding:18px;margin-top:16px}.coach-intro{font-size:12px;line-height:1.7;color:var(--muted);margin:8px 0 16px}.coach-status{font-size:11px;color:var(--muted);min-height:18px;margin-top:12px}
+@media(max-width:560px){.ai-insight-grid{grid-template-columns:1fr}}
+
+@media(max-width:560px){.mood-options{gap:5px}.mood-option{padding:10px 3px}.mood-option .emoji{font-size:24px}.mood-option small{font-size:9px}}
+
+@media(max-width:850px){.auth-screen{grid-template-columns:1fr}.auth-side{display:none}.app{grid-template-columns:56px minmax(0,1fr);padding:9px;gap:9px}.sidebar{display:none}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.auth-card-wrap{padding:16px}.auth-card{padding:27px 22px}.app{height:100dvh;min-height:0;padding:0;display:block}.rail,.sidebar{display:none}.main{height:100dvh;border:0;border-radius:0}.topbar{height:65px;padding:0 15px}.page{padding:19px 14px}.hero{padding:20px}.hero-icon{display:none}.cards{grid-template-columns:1fr}.msg{max-width:95%}.chips{flex-wrap:nowrap;overflow:auto}.chips button{white-space:nowrap}}
+</style>
+</head>
+<body>
+<section class="auth-screen" id="authScreen">
+  <div class="auth-side">
+    <div class="brand">mind<span>care.</span></div>
+    <div class="tagline">A little space to <em>feel better.</em></div>
+    <p>Your personal wellness space to check in with yourself, explore healthy habits, and talk with your AI companion.</p>
+    <div class="auth-art"><div class="orb">✦</div><small>Small steps matter.<br>Start wherever you are.</small></div>
+  </div>
+  <div class="auth-card-wrap">
+    <div class="auth-card">
+      <div class="brand" style="margin-bottom:25px">mind<span>care.</span></div>
+      <h1 id="authTitle">Welcome back</h1>
+      <p class="intro" id="authIntro">Sign in to continue to your wellness space.</p>
+      <form id="authForm">
+        <div class="field"><label for="username">Username</label><input id="username" name="name" autocomplete="username" placeholder="Enter your username" required></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="4"></div>
+        <button class="primary full" id="authSubmit" type="submit">Login</button>
+      </form>
+      <div class="status" id="authStatus" role="status"></div>
+      <div class="switch"><span id="switchText">New to MindCare?</span> <button class="linkbtn" id="switchMode" type="button">Create account</button></div>
+      <div class="fine">Your account is managed by your MindCare Java backend.</div>
+    </div>
+  </div>
+</section>
+
+<section class="app hidden" id="appScreen">
+  <aside class="rail"><div class="logo">m</div><div class="nav active" title="Home">⌂</div><div class="nav" title="AI chat">✉</div><div class="nav">♡</div><div class="nav bottom">⚙</div></aside>
+  <aside class="sidebar">
+    <div class="brandline"><div class="brand">mind<span>care.</span></div><button class="small-add" onclick="openChat()" title="New chat">＋</button></div>
+    <div class="side-title">YOUR ACCOUNT</div>
+    <div class="person-card"><div class="avatar" id="sideInitial">U</div><div><b id="sideName">User</b><small>MindCare member</small></div></div>
+    <div class="side-label">WORKSPACE</div>
+    <div class="side-link active" id="dashNav" onclick="showDashboard()">⌂ &nbsp; Dashboard</div>
+    <div class="side-link" id="chatNav" onclick="openChat()">✦ &nbsp; AI wellness chat</div>
+    <div class="side-link" id="moodNav" onclick="openMood()">♥ &nbsp; Mood tracker</div>
+    <div class="side-link" id="coachNav" onclick="openWellnessCoach()">✨ &nbsp; AI Wellness Coach</div>
+    <div class="reminder"><b>💜 A gentle reminder</b><p>You don't have to solve everything today. One small step is enough.</p></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="avatar" id="topInitial">U</div><div class="who"><b id="topName">User</b><small><span class="online">●</span> Signed in to MindCare</small></div><button class="logout" onclick="logout()">Log out</button></header>
+    <div class="page" id="dashboardPage">
+      <div class="dashboard">
+        <h1 id="greeting">Welcome to MindCare</h1><p class="lead">Your personal space for wellness and reflection.</p>
+        <div class="hero"><div><h2>You deserve a moment for yourself.</h2><p>Talk through what's on your mind with your MindCare AI companion. You can start with a simple hello.</p><button onclick="openChat()">Start a conversation&nbsp; →</button></div><div class="hero-icon">✦</div></div>
+        <div class="section-head"><b>Your wellness space</b><small>Choose where to begin</small></div>
+        <div class="cards">
+          <div class="tile"><div class="tile-icon">💬</div><b>AI wellness chat</b><p>Share your thoughts and receive supportive, general guidance.</p></div>
+          <div class="tile"><div class="tile-icon">🌿</div><b>Take a mindful pause</b><p>Slow down, breathe, and give yourself a little space.</p></div>
+          <div class="tile" role="button" tabindex="0" onclick="openMood()" style="cursor:pointer"><div class="tile-icon">😊</div><b>Daily Mood Tracker</b><p>Record how you feel and review your mood history.</p></div>
+          <div class="tile" role="button" tabindex="0" onclick="openWellnessCoach()" style="cursor:pointer"><div class="tile-icon">🌿</div><b>AI Wellness Coach</b><p>Get a personal 7-day wellness plan based on your saved mood history.</p></div>
+          <div class="tile"><div class="tile-icon">✨</div><b>Small steps count</b><p>You can begin with one question or one small positive habit.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="page hidden" id="chatPage">
+      <div class="chatpage">
+        <div class="chatwelcome" id="chatWelcome"><div class="bigicon">✦</div><h2>Hi <span id="chatUser">there</span>, I'm here to listen.</h2><p>What's on your mind today? You can talk freely, at your own pace.</p></div>
+        <div class="messages" id="messages" aria-live="polite">
+          <div class="msg"><div class="mini">✦</div><div><div class="bubble">Hello! 💜 I'm your MindCare AI companion. How are you feeling today?</div><div class="meta">MindCare AI · now</div></div></div>
+        </div>
+        <div class="composer-area">
+          <div class="chips"><button onclick="suggest('I feel stressed today')">I'm feeling stressed</button><button onclick="suggest('I want to improve my sleep')">My sleep</button><button onclick="suggest('Suggest a simple calming activity')">Help me relax</button></div>
+          <div class="composer"><textarea id="chatInput" rows="1" placeholder="Message your MindCare AI..." aria-label="Message"></textarea><button class="send" id="sendButton" onclick="sendChat()" aria-label="Send">➤</button></div>
+          <div class="chat-note">AI support is not a medical diagnosis or emergency service. Responses are generated by your locally hosted Qwen model.</div>
+        </div>
+      </div>
+    </div>
+    <div class="page hidden" id="moodPage">
+      <div class="mood-page">
+        <h1 style="font-size:25px;margin:0 0 8px">Daily Mood Tracker</h1>
+        <p style="color:var(--muted);font-size:13px;margin:0 0 20px">Take a moment to check in with yourself.</p>
+        <div class="mood-card">
+          <h2 style="font-size:17px;margin:0">How are you feeling today?</h2>
+          <p style="font-size:12px;color:var(--muted)">Choose the mood that best describes how you feel right now.</p>
+          <div class="mood-options">
+            <button type="button" class="mood-option" data-mood="HAPPY" data-score="5" onclick="selectMood(this)"><span class="emoji">😄</span><small>Happy</small></button>
+            <button type="button" class="mood-option" data-mood="GOOD" data-score="4" onclick="selectMood(this)"><span class="emoji">🙂</span><small>Good</small></button>
+            <button type="button" class="mood-option" data-mood="OKAY" data-score="3" onclick="selectMood(this)"><span class="emoji">😐</span><small>Okay</small></button>
+            <button type="button" class="mood-option" data-mood="SAD" data-score="2" onclick="selectMood(this)"><span class="emoji">😟</span><small>Sad</small></button>
+            <button type="button" class="mood-option" data-mood="VERY_SAD" data-score="1" onclick="selectMood(this)"><span class="emoji">😢</span><small>Very sad</small></button>
+          </div>
+          <label for="moodNote" style="display:block;font-size:12px;font-weight:700;margin:12px 0 8px">Add a note (optional)</label>
+          <textarea id="moodNote" class="mood-note" maxlength="2000" placeholder="What made you feel this way?"></textarea>
+          <button class="primary mood-save" id="saveMoodButton" type="button" onclick="saveMood()">Save mood</button>
+          <div class="mood-status" id="moodStatus" role="status"></div>
+        </div>
+        <div class="mood-card">
+          <h2 style="font-size:17px;margin:0 0 8px">Your Weekly Mood Report</h2>
+          <p style="font-size:12px;color:var(--muted);margin:0 0 14px">Your most recent mood entries, shown from oldest to newest.</p>
+          <div style="height:260px;position:relative"><canvas id="weeklyMoodChart" aria-label="Weekly mood chart"></canvas></div>
+          <p id="weeklyMoodStatus" class="mood-status" role="status"></p>
+        </div>
+        <div class="mood-card" id="aiMoodInsights">
+          <h2 style="font-size:17px;margin:0 0 8px">✨ AI Mood Insights</h2>
+          <p style="font-size:12px;color:var(--muted);margin:0 0 12px">A summary of your saved mood entries, generated by your MindCare Python analysis API.</p>
+          <div id="moodInsightsContent"><p style="font-size:12px;color:var(--muted)">Click the button to analyse your mood history.</p></div>
+          <button class="primary" id="analyseMoodButton" type="button" onclick="loadMoodInsights()">Analyse my mood</button>
+          <div class="ai-insight-status" id="moodInsightsStatus" role="status"></div>
+        </div>
+        <div class="mood-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <h2 style="font-size:17px;margin:0">Your mood history</h2>
+            <button class="logout" type="button" onclick="loadMoodHistory()">Refresh</button>
+          </div>
+          <div id="moodHistory" style="margin-top:12px"><p style="font-size:12px;color:var(--muted)">Your mood history will appear here.</p></div>
+        </div>
+        <p style="font-size:10px;color:var(--muted);text-align:center">Mood entries are personal reflections, not a medical diagnosis.</p>
+      </div>
+    </div>
+
+    <div class="page hidden" id="coachPage">
+      <div class="mood-page">
+        <h1 style="font-size:25px;margin:0 0 8px">✨ AI Wellness Coach</h1>
+        <p class="coach-intro">Your personal 7-day wellness plan, created by Qwen using your recent saved mood history and mood trend.</p>
+        <div class="mood-card">
+          <h2 style="font-size:17px;margin:0 0 8px">Your weekly wellness plan</h2>
+          <p class="coach-intro">Generate a fresh plan with simple activities such as mindful breathing, journaling, gentle movement and healthy breaks.</p>
+          <button class="primary" id="generateWellnessPlanButton" type="button" onclick="generateWellnessPlan()">Generate my weekly plan</button>
+          <div class="coach-status" id="wellnessCoachStatus" role="status"></div>
+          <div id="wellnessCoachOutput" class="coach-output hidden" aria-live="polite"></div>
+        </div>
+        <p style="font-size:10px;color:var(--muted);text-align:center">These suggestions support general wellbeing. They are not a medical diagnosis, treatment, or emergency service.</p>
+      </div>
+    </div>
+  </main>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Match the backend hostname to the hostname used to open this page.
+// This prevents localhost/127.0.0.1 session-cookie mismatches.
+const API_HOST = window.location.hostname === "127.0.0.1"
+  ? "127.0.0.1"
+  : "localhost";
+const API_BASE = `http://${API_HOST}:8080`;
+let registerMode = false, currentUser = "";
+const $ = id => document.getElementById(id);
+function setAuthStatus(message, good=false){$("authStatus").textContent=message;$("authStatus").style.color=good?"#20ad79":"#d94b65";}
+function setMode(register){
+  registerMode=register;
+  $("authTitle").textContent=register?"Create your account":"Welcome back";
+  $("authIntro").textContent=register?"Create an account to enter your personal wellness space.":"Sign in to continue to your wellness space.";
+  $("authSubmit").textContent=register?"Create account":"Login";
+  $("switchText").textContent=register?"Already have an account?":"New to MindCare?";
+  $("switchMode").textContent=register?"Login":"Create account";
+  $("password").autocomplete=register?"new-password":"current-password";
+  setAuthStatus("");
+}
+$("switchMode").addEventListener("click",()=>setMode(!registerMode));
+$("authForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=$("username").value.trim(), password=$("password").value;
+  if(!name||!password){setAuthStatus("Enter both username and password.");return;}
+  $("authSubmit").disabled=true; $("authSubmit").textContent=registerMode?"Creating...":"Signing in...";
+  setAuthStatus("Connecting to MindCare server...",true);
+  try{
+    // The current Java UserController uses @RequestParam, so send form-encoded data.
+    const body=new URLSearchParams({name,password});
+    const endpoint=registerMode?"/api/user/register":"/api/user/login";
+    const response=await fetch(API_BASE+endpoint,{method:"POST",credentials:"include",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:body.toString()});
+    const result=(await response.text()).trim();
+    console.log("MindCare auth response:", response.status, result);
+    if(!response.ok) throw new Error(result||("Server error "+response.status));
+    if(registerMode){
+      if(/already exists/i.test(result)) throw new Error("This username already exists. Please log in.");
+      setAuthStatus("Account created. Signing you in...",true);
+      // Registration endpoint returns success text; proceed to login to verify password.
+      const loginResponse=await fetch(API_BASE+"/api/user/login",{method:"POST",credentials:"include",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:body.toString()});
+      const loginText=(await loginResponse.text()).trim();
+      if(!loginResponse.ok||loginText.toLowerCase()!=="login successful") throw new Error(loginText||"Account created, but automatic login failed. Please switch to Login.");
+    }else if(result.toLowerCase()!=="login successful"){
+      throw new Error(result||"Invalid username or password.");
+    }
+    enterApp(name);
+  }catch(err){
+    const msg=err.message==="Failed to fetch"
+      ?"Cannot reach Java. Check that Spring Boot is running on port 8080 and that CORS allows your Live Server address."
+      :err.message;
+    setAuthStatus(msg);
+  }finally{$("authSubmit").disabled=false;$("authSubmit").textContent=registerMode?"Create account":"Login";}
+});
+function clearChatUI(){
+  // Remove all messages belonging to the previous account from the screen.
+  $("messages").innerHTML="";
+  $("chatWelcome").classList.remove("hidden");
+  $("chatInput").value="";
+  $("chatInput").style.height="auto";
+  $("sendButton").disabled=false;
+}
+
+async function loadChatHistory(){
+  clearChatUI();
+
+  try {
+    const response = await fetch(API_BASE + "/api/chat/history", {
+      method: "GET",
+      credentials: "include"
+    });
+
+    if (!response.ok) {
+      const raw = await response.text();
+      throw new Error("Could not load chat history (" + response.status + "): " + raw);
+    }
+
+    const history = await response.json();
+
+    if (Array.isArray(history) && history.length > 0) {
+      $("chatWelcome").classList.add("hidden");
+      history.forEach(item => {
+        addChatMessage(item.message, item.role === "user");
+      });
+    }
+  } catch (error) {
+    console.error("Chat history loading failed:", error);
+    // Keep the chat usable even if history cannot be loaded.
+  }
+}
+
+async function enterApp(name){
+  currentUser=name;
+  clearChatUI();
+
+  $("authScreen").classList.add("hidden");
+  $("appScreen").classList.remove("hidden");
+
+  const initial=(name[0]||"U").toUpperCase();
+  $("sideInitial").textContent=initial;
+  $("topInitial").textContent=initial;
+  $("sideName").textContent=name;
+  $("topName").textContent=name;
+  $("greeting").textContent="Welcome, "+name+"!";
+  $("chatUser").textContent=name;
+
+  showDashboard();
+  await loadChatHistory();
+  await loadMoodHistory();
+}
+
+async function logout(){
+  try {
+    await fetch(API_BASE+"/api/user/logout", {
+      method:"POST",
+      credentials:"include"
+    });
+  } catch(e) {
+    console.warn("Logout request failed",e);
+  }
+
+  clearChatUI();
+  currentUser="";
+  $("appScreen").classList.add("hidden");
+  $("authScreen").classList.remove("hidden");
+  $("username").value="";
+  $("password").value="";
+  setMode(false);
+}
+function hideAllPages(){
+  $("dashboardPage").classList.add("hidden");
+  $("chatPage").classList.add("hidden");
+  $("moodPage").classList.add("hidden");
+  $("coachPage").classList.add("hidden");
+  $("dashNav").classList.remove("active");
+  $("chatNav").classList.remove("active");
+  $("moodNav").classList.remove("active");
+  $("coachNav").classList.remove("active");
+}
+function showDashboard(){
+  hideAllPages();
+  $("dashboardPage").classList.remove("hidden");
+  $("dashNav").classList.add("active");
+}
+function openChat(){
+  hideAllPages();
+  $("chatPage").classList.remove("hidden");
+  $("chatNav").classList.add("active");
+  $("chatInput").focus();
+}
+function openMood(){
+  hideAllPages();
+  $("moodPage").classList.remove("hidden");
+  $("moodNav").classList.add("active");
+  loadMoodHistory();
+  loadWeeklyMoodChart();
+  loadMoodInsights();
+}
+function addChatMessage(text, user){
+  $("chatWelcome").classList.add("hidden");
+  const row=document.createElement("div");row.className="msg"+(user?" user":"");
+  const avatar=document.createElement("div");avatar.className="mini";avatar.textContent=user?(currentUser[0]||"U").toUpperCase():"✦";
+  const wrap=document.createElement("div"),bubble=document.createElement("div"),meta=document.createElement("div");
+  bubble.className="bubble";bubble.textContent=text;meta.className="meta";meta.textContent=user?"You · now":"MindCare AI · now";
+  wrap.append(bubble,meta);row.append(avatar,wrap);$("messages").append(row);$("messages").scrollTop=$("messages").scrollHeight;
+}
+async function sendChat(){
+  const input=$("chatInput"),question=input.value.trim();if(!question||$("sendButton").disabled)return;
+  $("sendButton").disabled=true;input.value="";input.style.height="auto";addChatMessage(question,true);
+  const wait=document.createElement("div");wait.className="typing";wait.textContent="MindCare AI is thinking…";wait.id="typing";$("messages").append(wait);$("messages").scrollTop=$("messages").scrollHeight;
+  try{
+    const response=await fetch(API_BASE+"/api/chat",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({question})});
+    const raw=await response.text();
+    if(!response.ok)throw new Error("Chat API error "+response.status+": "+raw);
+    let data;try{data=JSON.parse(raw)}catch{throw new Error("Java returned an unexpected response: "+raw)}
+    if(!data.answer)throw new Error(data.error||"No answer received. Check QwenService and Ollama.");
+    addChatMessage(data.answer,false);
+  }catch(err){
+    let message=err.message;
+    if(message==="Failed to fetch")message="Cannot connect to Java chat API. Check Spring Boot, port 8080, and CORS for your Live Server origin.";
+    addChatMessage("Sorry, I couldn't get a reply. "+message,false);
+  }finally{$("typing")?.remove();$("sendButton").disabled=false;input.focus();}
+}
+
+let selectedMood = "";
+let selectedMoodScore = null;
+
+function selectMood(button){
+  document.querySelectorAll(".mood-option").forEach(option => option.classList.remove("selected"));
+  button.classList.add("selected");
+  selectedMood = button.dataset.mood;
+  selectedMoodScore = Number(button.dataset.score);
+  $("moodStatus").textContent = "";
+}
+
+async function saveMood(){
+  if(!selectedMood){
+    $("moodStatus").textContent = "Please select a mood first.";
+    return;
+  }
+  const button = $("saveMoodButton");
+  button.disabled = true;
+  button.textContent = "Saving...";
+  try {
+    const response = await fetch(API_BASE + "/api/moods", {
+      method: "POST",
+      credentials: "include",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        mood: selectedMood,
+        moodScore: selectedMoodScore,
+        note: $("moodNote").value.trim()
+      })
+    });
+    const raw = await response.text();
+    if(!response.ok) throw new Error(raw || ("HTTP " + response.status));
+    $("moodStatus").textContent = "Your mood has been saved.";
+    $("moodStatus").style.color = "#20ad79";
+    $("moodNote").value = "";
+    selectedMood = "";
+    selectedMoodScore = null;
+    document.querySelectorAll(".mood-option").forEach(option => option.classList.remove("selected"));
+    await loadMoodHistory();
+    await loadWeeklyMoodChart();
+    await loadMoodInsights();
+  } catch(error) {
+    $("moodStatus").textContent = "Could not save mood: " + error.message;
+    $("moodStatus").style.color = "#d94b65";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Save mood";
+  }
+}
+
+function moodEmoji(mood){
+  const values = {HAPPY:"😄", GOOD:"🙂", OKAY:"😐", SAD:"😟", VERY_SAD:"😢"};
+  return values[mood] || "💜";
+}
+
+async function loadMoodHistory(){
+  const target = $("moodHistory");
+  if(!target || !currentUser) return;
+  target.innerHTML = '<p style="font-size:12px;color:var(--muted)">Loading your moods...</p>';
+  try {
+    const response = await fetch(API_BASE + "/api/moods", {
+      method: "GET",
+      credentials: "include"
+    });
+    const raw = await response.text();
+    if(!response.ok) throw new Error(raw || ("HTTP " + response.status));
+    const moods = JSON.parse(raw);
+    if(!Array.isArray(moods) || moods.length === 0){
+      target.innerHTML = '<p style="font-size:12px;color:var(--muted)">No mood entries yet. Record your first mood above.</p>';
+      return;
+    }
+    target.innerHTML = "";
+    moods.forEach(entry => {
+      const row = document.createElement("div");
+      row.className = "mood-entry";
+      const emoji = document.createElement("div");
+      emoji.className = "mood-entry-emoji";
+      emoji.textContent = moodEmoji(entry.mood);
+      const content = document.createElement("div");
+      content.className = "mood-entry-text";
+      const heading = document.createElement("b");
+      heading.textContent = String(entry.mood || "Mood").replaceAll("_", " ");
+      const note = document.createElement("p");
+      note.textContent = entry.note || "No note added.";
+      const date = document.createElement("small");
+      date.textContent = entry.createdAt ? new Date(entry.createdAt).toLocaleString() : "";
+      content.append(heading, note, date);
+      row.append(emoji, content);
+      target.append(row);
+    });
+  } catch(error) {
+    console.error("Mood history error:", error);
+    target.innerHTML = '<p style="font-size:12px;color:#d94b65">Could not load mood history. Check the Java Mood API and login session.</p>';
+  }
+}
+
+let weeklyMoodChart = null;
+
+async function loadWeeklyMoodChart(){
+  const status = $("weeklyMoodStatus");
+  const canvas = $("weeklyMoodChart");
+  if(!canvas || !currentUser) return;
+  if(status){ status.textContent = "Loading your weekly mood report..."; status.style.color = "var(--muted)"; }
+
+  try {
+    const response = await fetch(API_BASE + "/api/moods/weekly", {
+      method: "GET",
+      credentials: "include"
+    });
+    const raw = await response.text();
+    if(!response.ok) throw new Error(raw || ("HTTP " + response.status));
+    const moods = JSON.parse(raw);
+    if(!Array.isArray(moods)) throw new Error("The weekly mood API did not return a list.");
+
+    // The API returns newest first. Reverse a copy so the chart reads left to right.
+    const ordered = [...moods].reverse();
+    const labels = ordered.map(entry => {
+      const date = entry.createdAt ? new Date(entry.createdAt) : null;
+      return date && !Number.isNaN(date.getTime())
+        ? date.toLocaleDateString(undefined, {weekday: "short", day: "numeric", month: "short"})
+        : "Mood";
+    });
+    const scores = ordered.map(entry => Number(entry.moodScore));
+
+    if(weeklyMoodChart){ weeklyMoodChart.destroy(); weeklyMoodChart = null; }
+    if(typeof Chart === "undefined") throw new Error("Chart.js did not load. Check your internet connection and refresh the page.");
+
+    weeklyMoodChart = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Mood score (1 = Very sad, 5 = Happy)",
+          data: scores,
+          backgroundColor: "rgba(118, 87, 232, 0.78)",
+          borderColor: "#7657e8",
+          borderWidth: 1,
+          borderRadius: 8,
+          maxBarThickness: 48
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { min: 0, max: 5, ticks: { stepSize: 1 }, title: { display: true, text: "Mood score" } },
+          x: { title: { display: true, text: "Date recorded" } }
+        }
+      }
+    });
+    if(status){
+      status.textContent = moods.length ? "Showing " + moods.length + " recent mood entries." : "No mood entries yet. Save a mood to see your chart.";
+      status.style.color = "var(--muted)";
+    }
+  } catch(error) {
+    console.error("Weekly mood chart error:", error);
+    if(status){ status.textContent = "Could not load weekly chart: " + error.message; status.style.color = "var(--red)"; }
+  }
+}
+
+async function loadMoodInsights(){
+  const content = $("moodInsightsContent");
+  const status = $("moodInsightsStatus");
+  const button = $("analyseMoodButton");
+  if(!content || !currentUser) return;
+  if(status) status.textContent = "Analysing your saved mood entries...";
+  if(button){ button.disabled = true; button.textContent = "Analysing..."; }
+  try {
+    const response = await fetch(API_BASE + "/api/moods/analysis", {
+      method: "GET",
+      credentials: "include"
+    });
+    const raw = await response.text();
+    if(!response.ok) throw new Error(raw || ("HTTP " + response.status));
+    const data = JSON.parse(raw);
+
+    const entries = Number(data.entriesAnalyzed ?? 0);
+    const average = data.averageMoodScore;
+    const older = data.olderAverage;
+    const recent = data.recentAverage;
+    const trend = String(data.trend || "UNKNOWN").replaceAll("_", " ");
+    const message = data.message || "Your mood analysis is ready.";
+
+    content.innerHTML = "";
+    const grid = document.createElement("div");
+    grid.className = "ai-insight-grid";
+    const stats = [
+      {label:"Average mood score", value: average == null ? "—" : Number(average).toFixed(1) + " / 5"},
+      {label:"Entries analysed", value:String(entries)},
+      {label:"Mood trend", value:trend}
+    ];
+    stats.forEach(item => {
+      const box = document.createElement("div");
+      box.className = "ai-insight-stat";
+      const label = document.createElement("small"); label.textContent = item.label;
+      const value = document.createElement("strong"); value.textContent = item.value;
+      box.append(label, value); grid.append(box);
+    });
+    content.append(grid);
+
+    const explanation = document.createElement("div");
+    explanation.className = "ai-insight-message";
+    explanation.textContent = message;
+    content.append(explanation);
+
+    if(older != null || recent != null){
+      const comparison = document.createElement("p");
+      comparison.style.cssText = "font-size:11px;color:var(--muted);margin:8px 0 0";
+      comparison.textContent = "Older average: " + (older == null ? "—" : Number(older).toFixed(2)) +
+        " · Recent average: " + (recent == null ? "—" : Number(recent).toFixed(2));
+      content.append(comparison);
+    }
+    if(status) status.textContent = data.trend === "INSUFFICIENT_DATA"
+      ? "Add more genuine mood entries to receive a trend analysis."
+      : "Analysis updated just now.";
+  } catch(error) {
+    console.error("Mood insights error:", error);
+    content.textContent = "Could not load AI mood insights. Check that the Java backend and Flask API are running.";
+    if(status) status.textContent = error.message;
+  } finally {
+    if(button){ button.disabled = false; button.textContent = "Analyse my mood"; }
+  }
+}
+
+
+function openWellnessCoach(){
+  hideAllPages();
+  $("coachPage").classList.remove("hidden");
+  $("coachNav").classList.add("active");
+}
+
+async function generateWellnessPlan(){
+  const button = $("generateWellnessPlanButton");
+  const status = $("wellnessCoachStatus");
+  const output = $("wellnessCoachOutput");
+
+  button.disabled = true;
+  button.textContent = "Generating your plan...";
+  status.textContent = "MindCare is reviewing your saved mood history and asking Qwen to prepare your plan. This may take a little time.";
+  status.style.color = "var(--muted)";
+  output.classList.add("hidden");
+  output.textContent = "";
+
+  try {
+    const response = await fetch(API_BASE + "/api/wellness-coach/plan", {
+      method: "GET",
+      credentials: "include"
+    });
+
+    const raw = await response.text();
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      throw new Error(raw || "The server returned an unexpected response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.error || ("Request failed with HTTP " + response.status));
+    }
+
+    if (data.status === "INSUFFICIENT_DATA") {
+      status.textContent = data.message || "Please record a mood before generating a plan.";
+      status.style.color = "var(--red)";
+      return;
+    }
+
+    if (data.status !== "SUCCESS" || !data.wellnessPlan) {
+      throw new Error(data.error || "No wellness plan was returned.");
+    }
+
+    output.textContent = data.wellnessPlan;
+    output.classList.remove("hidden");
+    status.textContent = "Your plan is ready. Mood trend: " + String(data.moodTrend || "UNKNOWN").replaceAll("_", " ") + ".";
+    status.style.color = "var(--green)";
+  } catch (error) {
+    console.error("Wellness Coach error:", error);
+    status.textContent = "Could not generate your plan: " + error.message;
+    status.style.color = "var(--red)";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Generate my weekly plan";
+  }
+}
+
+function suggest(text){$("chatInput").value=text;sendChat();}
+$("chatInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}});
+$("chatInput").addEventListener("input",e=>{e.target.style.height="auto";e.target.style.height=Math.min(e.target.scrollHeight,100)+"px";});
+</script>
+</body>
+</html>
