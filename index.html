@@ -165,10 +165,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 <script>
 // Match the backend hostname to the hostname used to open this page.
 // This prevents localhost/127.0.0.1 session-cookie mismatches.
-const API_HOST = window.location.hostname === "127.0.0.1"
-  ? "127.0.0.1"
-  : "localhost";
-const API_BASE = `http://${API_HOST}:8080`;
+const API_BASE = "https://mindcare-cod3.onrender.com";
 let registerMode = false, currentUser = "";
 const $ = id => document.getElementById(id);
 function setAuthStatus(message, good=false){$("authStatus").textContent=message;$("authStatus").style.color=good?"#20ad79":"#d94b65";}
